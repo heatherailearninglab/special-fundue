@@ -1,4 +1,3 @@
-/* Electric AI Lab Theme – Dark neon, glowing cards, icons */
 :root {
   --bg-dark: #0B0F1A;
   --surface: #111827;
@@ -27,35 +26,30 @@ body {
 }
 a { color: var(--primary); text-decoration: none; }
 a:hover { text-decoration: underline; }
-/* Glow card effect */
-.glass-card, .card {
-  background: var(--card-bg);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(0,229,255,0.2);
-  border-radius: var(--radius);
-  transition: all var(--transition);
-}
-.glass-card:hover, .card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--border-glow);
-  border-color: var(--primary);
-}
-/* Section titles with icons */
-.section-title {
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+.navbar {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
-  border-left: 4px solid var(--primary);
-  padding-left: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  background: rgba(3, 6, 12, 0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 229, 255, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
-.section-title i {
-  color: var(--primary);
-  font-size: 1.8rem;
+.nav-link {
+  color: #ccf5ff;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  transition: 0.2s;
+  background: transparent;
 }
-/* Buttons */
+.nav-link i { margin-right: 8px; }
+.nav-link:hover { background: rgba(0, 255, 255, 0.1); color: var(--primary); text-shadow: 0 0 4px cyan; }
 .btn {
   display: inline-flex;
   align-items: center;
@@ -75,13 +69,13 @@ a:hover { text-decoration: underline; }
   color: var(--primary);
 }
 .btn-secondary:hover {
-  background: rgba(0,229,255,0.1);
+  background: rgba(0, 229, 255, 0.1);
   box-shadow: var(--border-glow);
 }
-/* Hero animation (pulse glow) */
-@keyframes pulseGlow {
-  0% { opacity: 0.3; transform: scale(1); }
-  100% { opacity: 0.8; transform: scale(1.05); }
+.hero {
+  position: relative;
+  padding: 4rem 0;
+  overflow: hidden;
 }
 .hero-graphic {
   position: absolute;
@@ -94,10 +88,56 @@ a:hover { text-decoration: underline; }
   animation: pulseGlow 4s infinite alternate;
   pointer-events: none;
 }
-/* Utility */
-.wrap { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+@keyframes pulseGlow {
+  0% { opacity: 0.3; transform: scale(1); }
+  100% { opacity: 0.8; transform: scale(1.05); }
+}
+.hero-content { position: relative; z-index: 2; }
+.eyebrow {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  background: rgba(0, 229, 255, 0.1);
+  color: var(--primary);
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; margin-bottom: 1rem; }
+.lead { font-size: 1.2rem; color: var(--text-muted); max-width: 700px; margin-bottom: 2rem; }
+.button-row { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
+.section { padding: 3rem 0; }
 .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
 .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  transition: all var(--transition);
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--border-glow);
+  border-color: var(--primary);
+}
+.card i { font-size: 2rem; color: var(--primary); margin-bottom: 1rem; }
+.kicker { font-size: 0.8rem; text-transform: uppercase; color: var(--primary); margin-bottom: 0.5rem; }
+.card h3 { font-size: 1.25rem; margin-bottom: 0.5rem; }
+.card p { color: var(--text-muted); margin-bottom: 1rem; }
+.card ul { list-style: none; padding-left: 0; }
+.card ul li { margin: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem; }
+.card ul li i { font-size: 1rem; margin: 0; color: var(--highlight); }
 .text-center { text-align: center; }
-.mt-2 { margin-top: 0.5rem; }
-.mt-4 { margin-top: 1.5rem; }
+footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid rgba(0, 229, 255, 0.3);
+  margin-top: 2rem;
+  color: var(--text-muted);
+}
+@media (max-width: 768px) {
+  .navbar { flex-direction: column; align-items: center; gap: 0.5rem; }
+  .hero { padding: 2rem 0; }
+  .hero-graphic { width: 200px; height: 200px; filter: blur(40px); }
+}
