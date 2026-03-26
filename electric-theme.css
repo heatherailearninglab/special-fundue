@@ -1,0 +1,103 @@
+/* Electric AI Lab Theme – Dark neon, glowing cards, icons */
+:root {
+  --bg-dark: #0B0F1A;
+  --surface: #111827;
+  --primary: #00E5FF;
+  --secondary: #7B61FF;
+  --accent: #FF3CAC;
+  --highlight: #39FF14;
+  --text-light: #F5F7FA;
+  --text-muted: #9CA3AF;
+  --border-glow: 0 0 4px rgba(0,229,255,0.4), 0 0 8px rgba(0,229,255,0.2);
+  --card-bg: rgba(17, 24, 39, 0.7);
+  --radius: 1.5rem;
+  --transition: 0.2s ease;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background: var(--bg-dark);
+  color: var(--text-light);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  background-image: radial-gradient(circle at 10% 20%, rgba(0,229,255,0.08) 0%, transparent 40%);
+}
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+/* Glow card effect */
+.glass-card, .card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0,229,255,0.2);
+  border-radius: var(--radius);
+  transition: all var(--transition);
+}
+.glass-card:hover, .card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--border-glow);
+  border-color: var(--primary);
+}
+/* Section titles with icons */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--primary);
+  padding-left: 1rem;
+}
+.section-title i {
+  color: var(--primary);
+  font-size: 1.8rem;
+}
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--primary);
+  color: #0B0F1A;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+}
+.btn-secondary:hover {
+  background: rgba(0,229,255,0.1);
+  box-shadow: var(--border-glow);
+}
+/* Hero animation (pulse glow) */
+@keyframes pulseGlow {
+  0% { opacity: 0.3; transform: scale(1); }
+  100% { opacity: 0.8; transform: scale(1.05); }
+}
+.hero-graphic {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+  filter: blur(60px);
+  animation: pulseGlow 4s infinite alternate;
+  pointer-events: none;
+}
+/* Utility */
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+.text-center { text-align: center; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-4 { margin-top: 1.5rem; }

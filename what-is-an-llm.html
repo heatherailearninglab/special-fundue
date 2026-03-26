@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>How an LLM Generates Text</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#080d14;color:#e2e8f0;font-family:system-ui,sans-serif;min-height:100vh;padding:32px 16px 56px;display:flex;flex-direction:column;align-items:center;background-image:radial-gradient(ellipse at 20% 0%,rgba(34,211,238,.07) 0%,transparent 50%),radial-gradient(ellipse at 80% 100%,rgba(129,140,248,.07) 0%,transparent 50%)}
+h1{font-size:clamp(20px,4vw,34px);font-weight:700;letter-spacing:-.02em;line-height:1.2;text-align:center}
+.subtitle{color:#64748b;font-size:14px;margin-top:10px;max-width:480px;line-height:1.65;text-align:center}
+.eyebrow{font-size:11px;letter-spacing:.2em;color:#22d3ee;font-family:monospace;margin-bottom:10px;text-transform:uppercase;text-align:center}
+.accent{color:#22d3ee}
+.tabs{display:flex;gap:4px;margin:28px 0;background:rgba(255,255,255,.03);padding:6px;border-radius:12px;border:1px solid rgba(255,255,255,.06);flex-wrap:wrap;justify-content:center}
+.tab{padding:7px 13px;border-radius:8px;cursor:pointer;background:transparent;color:#64748b;border:1px solid transparent;font-family:monospace;font-size:12px;font-weight:500;transition:all .2s}
+.tab.active{background:rgba(34,211,238,.13);color:#22d3ee;border-color:rgba(34,211,238,.28)}
+.card-wrap{width:100%;max-width:780px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:20px;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.5)}
+.card-head{padding:14px 24px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.02)}
+.dots{margin-left:auto;display:flex;gap:5px;align-items:center}
+.dot{height:6px;border-radius:99px;transition:all .3s}
+.card-body{padding:26px 24px}
+.card-foot{padding:14px 24px;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center}
+.nav-btn{padding:9px 20px;border-radius:9px;font-family:monospace;font-size:13px;cursor:pointer;transition:all .2s}
+.nav-prev{border:1px solid rgba(255,255,255,.09);background:transparent;color:#94a3b8}
+.nav-next{border:1px solid rgba(34,211,238,.28);background:rgba(34,211,238,.09);color:#22d3ee}
+.nav-btn:disabled{opacity:.3;cursor:default}
+.foot-hint{font-family:monospace;font-size:11px;color:#475569}
+.ic{background:rgba(255,255,255,.03);border-radius:12px;padding:16px 18px;margin-bottom:16px;border:1px solid rgba(34,211,238,.12)}
+.ic.purple{border-color:rgba(129,140,248,.12)}
+.ic.green{border-color:rgba(52,211,153,.12)}
+.ic-title{font-family:monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;color:#22d3ee}
+.ic-title.purple{color:#818cf8}
+.ic-title.green{color:#34d399}
+p.desc{color:#94a3b8;line-height:1.7;font-size:14px;margin-bottom:16px}
+strong.hl{color:#e2e8f0}
+.step-list{display:flex;flex-direction:column;gap:9px}
+.step-item{display:flex;gap:10px;align-items:flex-start}
+.step-num{font-family:monospace;font-size:11px;color:#818cf8;min-width:22px;margin-top:2px}
+.step-text{color:#94a3b8;font-size:13px;line-height:1.5}
+.token-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.chip{padding:9px 16px;border-radius:8px;border:1px solid rgba(34,211,238,.3);background:rgba(34,211,238,.07);opacity:0;transform:translateY(12px);transition:opacity .4s ease,transform .4s ease}
+.chip .tok{font-family:monospace;font-size:15px;color:#22d3ee}
+.chip .tid{font-family:monospace;font-size:10px;color:#475569;margin-top:3px}
+.tok-examples{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.tok-ex{display:flex;align-items:center;gap:6px;font-size:11px;flex-wrap:wrap}
+.tok-key{font-family:monospace;color:#64748b;min-width:76px}
+.tok-sub{font-family:monospace;font-size:11px;background:rgba(129,140,248,.14);color:#818cf8;padding:2px 7px;border-radius:4px}
+.emb-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.emb-label{font-family:monospace;font-size:11px;color:#94a3b8;width:28px}
+.emb-bars{display:flex;gap:2px;flex:1}
+.emb-bar{height:16px;flex:1;border-radius:2px;opacity:0;transition:opacity .5s ease}
+.attn-wrap{display:flex;gap:20px;flex-wrap:wrap}
+.attn-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;max-width:270px}
+.attn-hdr{font-family:monospace;font-size:10px;color:#94a3b8;text-align:center;padding-bottom:2px}
+.attn-row-lbl{font-family:monospace;font-size:10px;color:#94a3b8;display:flex;align-items:center}
+.attn-cell{height:28px;border-radius:4px;border:1px solid rgba(34,211,238,.14);display:flex;align-items:center;justify-content:center;font-family:monospace;font-size:9px;font-weight:700;transition:background .45s ease,color .45s ease}
+.qkv-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+.qkv-lbl{font-family:monospace;font-size:11px;min-width:62px;padding-top:1px}
+.qkv-desc{color:#64748b;font-size:12px;line-height:1.5}
+.layer-row{display:flex;align-items:center;gap:12px;margin-bottom:9px}
+.layer-num{font-family:monospace;font-size:11px;color:#475569;width:18px;text-align:right}
+.layer-track{flex:1;height:28px;background:rgba(255,255,255,.04);border-radius:6px;overflow:hidden;position:relative}
+.layer-fill{height:100%;width:0%;background:linear-gradient(90deg,rgba(34,211,238,.28),rgba(129,140,248,.28));border-radius:6px}
+.layer-text{position:absolute;top:0;left:12px;right:0;bottom:0;display:flex;align-items:center;font-family:monospace;font-size:11px;color:#475569;transition:color .3s}
+.layer-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.08);transition:all .3s}
+.prob-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.prob-word{font-family:monospace;font-size:13px;color:#94a3b8;width:42px}
+.prob-word.w{color:#22d3ee;font-weight:700}
+.prob-track{flex:1;height:10px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden}
+.prob-fill{height:100%;width:0%;border-radius:99px;transition:width .8s cubic-bezier(.34,1.56,.64,1)}
+.prob-fill.w{background:linear-gradient(90deg,#22d3ee,#818cf8)}
+.prob-fill.o{background:rgba(148,163,184,.38)}
+.prob-pct{font-family:monospace;font-size:11px;width:36px;text-align:right;color:#64748b}
+.prob-pct.w{color:#22d3ee}
+.sel-box{margin-top:14px;padding:12px 16px;border-radius:8px;background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.22);display:flex;align-items:center;gap:14px}
+.loop-row{display:flex;gap:14px;margin-bottom:7px}
+.loop-step{font-family:monospace;font-size:11px;color:#22d3ee;min-width:52px}
+.loop-desc{color:#94a3b8;font-size:13px}
+.note{font-size:11px;color:#475569;font-family:monospace;margin-top:10px}
+.cursor{border-right:2px solid #22d3ee;animation:blink 1s step-end infinite;margin-left:1px;display:inline-block;width:3px}
+@keyframes blink{50%{opacity:0}}
+.stage{display:none}
+.stage.active{display:block}
+.footer{color:#334155;font-size:12px;margin-top:26px;font-family:monospace;text-align:center}
+</style>
+<link rel="stylesheet" href="electric-theme.css">
+<script src="casey-widget.js" defer></script>
+</head>
+<body>
+
+<div class="eyebrow">System Architecture</div>
+<h1>How a Large Language Model<br><span class="accent">Generates Text</span></h1>
+<p class="subtitle">Trace a single prompt through the full pipeline — from raw characters to predicted next tokens.</p>
+
+<div class="tabs" id="tabs"></div>
+
+<div class="card-wrap">
+  <div class="card-head">
+    <span style="font-size:20px" id="head-icon"></span>
+    <div>
+      <div style="font-family:monospace;font-size:12px;color:#22d3ee" id="head-label"></div>
+      <div style="font-size:15px;font-weight:600;letter-spacing:-.01em" id="head-name"></div>
+    </div>
+    <div class="dots" id="dots"></div>
+  </div>
+
+  <div class="card-body">
+
+    <div class="stage" id="s0">
+      <p class="desc">Everything begins with a <strong class="hl">text prompt</strong> typed by the user. The model receives raw characters — it doesn't "understand" them yet. It must first convert them into a mathematical representation before any reasoning can occur.</p>
+      <div class="ic">
+        <div class="ic-title">Prompt Input</div>
+        <div style="font-family:monospace;font-size:22px;color:#e2e8f0;padding:10px 0">
+          <span id="typewriter"></span><span class="cursor"></span>
+        </div>
+        <div class="note"><span id="char-count">0</span> characters · waiting for submission</div>
+      </div>
+      <div class="ic purple">
+        <div class="ic-title purple">What happens next</div>
+        <div class="step-list">
+          <div class="step-item"><span class="step-num">01</span><span class="step-text">Text is split into tokens (sub-word units)</span></div>
+          <div class="step-item"><span class="step-num">02</span><span class="step-text">Tokens are mapped to high-dimensional vectors</span></div>
+          <div class="step-item"><span class="step-num">03</span><span class="step-text">Vectors flow through stacked transformer layers</span></div>
+          <div class="step-item"><span class="step-num">04</span><span class="step-text">A probability distribution over vocabulary is produced</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage" id="s1">
+      <p class="desc">A <strong class="hl">tokenizer</strong> splits text into tokens — roughly word-sized chunks, but common words stay whole while rare words split into sub-pieces. Each token maps to a unique integer ID in the model's vocabulary (~50,000 entries for GPT-style models).</p>
+      <div class="ic">
+        <div class="ic-title">Tokenization</div>
+        <div style="font-family:monospace;font-size:13px;color:#475569;margin-bottom:12px">"The cat sat on" →</div>
+        <div class="token-chips">
+          <div class="chip" id="chip0"><div class="tok">The</div><div class="tid">ID: 464</div></div>
+          <div class="chip" id="chip1"><div class="tok">cat</div><div class="tid">ID: 3797</div></div>
+          <div class="chip" id="chip2"><div class="tok">sat</div><div class="tid">ID: 3332</div></div>
+          <div class="chip" id="chip3"><div class="tok">on</div><div class="tid">ID: 319</div></div>
+        </div>
+      </div>
+      <div class="ic purple">
+        <div class="ic-title purple">Real-world tokenization examples</div>
+        <div class="tok-examples">
+          <div class="tok-ex"><span class="tok-key">"cat"</span><span style="color:#334155">→</span><span class="tok-sub">cat</span></div>
+          <div class="tok-ex"><span class="tok-key">"cats"</span><span style="color:#334155">→</span><span class="tok-sub">cats</span></div>
+          <div class="tok-ex"><span class="tok-key">"unbelievable"</span><span style="color:#334155">→</span><span class="tok-sub">un</span><span class="tok-sub">believ</span><span class="tok-sub">able</span></div>
+          <div class="tok-ex"><span class="tok-key">"ChatGPT"</span><span style="color:#334155">→</span><span class="tok-sub">Chat</span><span class="tok-sub">G</span><span class="tok-sub">PT</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage" id="s2">
+      <p class="desc">Each token ID is looked up in an <strong class="hl">embedding table</strong> — a giant matrix of learned floats. This converts each token into a dense vector of typically 768–12,288 numbers encoding semantic meaning. Positional encodings are added so the model knows word order.</p>
+      <div class="ic">
+        <div class="ic-title">Token → Vector (simplified to 12 dims)</div>
+        <div id="emb-container"></div>
+        <div class="note">Each bar = one dimension · Real embeddings: 768–12,288 dims</div>
+      </div>
+      <div class="ic purple">
+        <div class="ic-title purple">Why this matters</div>
+        <p style="color:#94a3b8;font-size:13px;line-height:1.7">"king" − "man" + "woman" ≈ "queen". Words with similar meanings cluster together in this high-dimensional space, encoding enormous amounts of knowledge absorbed from training data.</p>
+      </div>
+    </div>
+
+    <div class="stage" id="s3">
+      <p class="desc">The heart of the transformer. <strong class="hl">Self-attention</strong> lets each token "look at" all other tokens and decide what's relevant. For each token it computes Query, Key, and Value vectors, then scores how much attention to pay to every other position.</p>
+      <div class="attn-wrap">
+        <div>
+          <div class="ic">
+            <div class="ic-title">Attention heatmap (heads combined)</div>
+            <div class="attn-grid" id="attn-grid"></div>
+            <div class="note" style="margin-top:10px">Brighter = more attention · "on" attends strongly to "sat"</div>
+          </div>
+        </div>
+        <div style="flex:1;min-width:200px">
+          <div class="ic purple">
+            <div class="ic-title purple">QKV Mechanism</div>
+            <div class="qkv-row"><span class="qkv-lbl" style="color:#818cf8">Query (Q)</span><span class="qkv-desc">What am I looking for?</span></div>
+            <div class="qkv-row"><span class="qkv-lbl" style="color:#22d3ee">Key (K)</span><span class="qkv-desc">What do I contain?</span></div>
+            <div class="qkv-row" style="margin-bottom:0"><span class="qkv-lbl" style="color:#34d399">Value (V)</span><span class="qkv-desc">What do I pass forward?</span></div>
+          </div>
+          <div class="ic green">
+            <div class="ic-title green">Multi-head attention</div>
+            <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin:0">GPT-4 uses ~96 attention heads in parallel. Each head learns different patterns — syntax, coreference, semantics, and more.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage" id="s4">
+      <p class="desc">After attention, each token's representation passes through a <strong class="hl">feed-forward network</strong> — two linear transformations with a nonlinearity. This is where most knowledge is stored. Stacked dozens of times, each layer builds increasingly abstract understanding.</p>
+      <div class="ic">
+        <div class="ic-title">Transformer stack (simplified)</div>
+        <div id="layers-container"></div>
+      </div>
+      <div class="ic purple">
+        <div class="ic-title purple">Knowledge storage</div>
+        <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin:0">Individual neurons in feed-forward layers activate for specific concepts — cities, dates, famous people. The FFN acts as a distributed key-value memory storing world knowledge learned from training.</p>
+      </div>
+    </div>
+
+    <div class="stage" id="s5">
+      <p class="desc">The final token's representation is projected through a <strong class="hl">language model head</strong> and then <strong class="hl">softmax</strong> to produce a probability distribution over the full vocabulary. The model samples to choose the next token.</p>
+      <div class="ic">
+        <div class="ic-title">Next-token probabilities · "The cat sat on"</div>
+        <div id="prob-bars"></div>
+        <div class="sel-box">
+          <span style="font-family:monospace;font-size:12px;color:#475569">Selected token:</span>
+          <span style="font-family:monospace;font-size:22px;color:#22d3ee;font-weight:700">"the"</span>
+          <span style="font-family:monospace;font-size:12px;color:#475569;margin-left:auto">p = 34%</span>
+        </div>
+      </div>
+      <div class="ic purple">
+        <div class="ic-title purple">The autoregressive loop</div>
+        <div class="loop-row"><span class="loop-step">Append</span><span class="loop-desc">"the" is appended → "The cat sat on the"</span></div>
+        <div class="loop-row"><span class="loop-step">Re-run</span><span class="loop-desc">Full pipeline runs again on the extended sequence</span></div>
+        <div class="loop-row"><span class="loop-step">Sample</span><span class="loop-desc">Next token produced — e.g. "mat" (p = 18%)</span></div>
+        <div class="loop-row"><span class="loop-step">Repeat</span><span class="loop-desc">Until end-of-sequence token or max length reached</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card-foot">
+    <button class="nav-btn nav-prev" id="btn-prev">← Prev</button>
+    <span class="foot-hint">The cat sat on → <span class="accent">the</span></span>
+    <button class="nav-btn nav-next" id="btn-next">Next →</button>
+  </div>
+</div>
+
+<div class="footer">Simplified for illustration · Real models have billions of parameters and thousands of dimensions</div>
+
+<script>
+var STAGES=[
+  {icon:"⌨",label:"Stage 1 of 6",name:"User Input"},
+  {icon:"✂",label:"Stage 2 of 6",name:"Tokenization"},
+  {icon:"⬡",label:"Stage 3 of 6",name:"Token Embeddings"},
+  {icon:"◎",label:"Stage 4 of 6",name:"Self-Attention (Transformer)"},
+  {icon:"⚡",label:"Stage 5 of 6",name:"Feed-Forward Layers"},
+  {icon:"◈",label:"Stage 6 of 6",name:"Output: Next Token Prediction"}
+];
+var TAB_LABELS=["⌨ Input","✂ Tokenize","⬡ Embed","◎ Attention","⚡ Feed-Fwd","◈ Output"];
+var TOKENS=["The","cat","sat","on"];
+var EMBEDDINGS={
+  The:[0.9,0.2,0.6,0.1,0.8,0.3,0.7,0.5,0.4,0.9,0.1,0.6],
+  cat:[0.3,0.9,0.1,0.7,0.2,0.8,0.4,0.9,0.6,0.2,0.8,0.3],
+  sat:[0.5,0.4,0.9,0.3,0.6,0.7,0.1,0.2,0.9,0.5,0.4,0.7],
+  on: [0.2,0.6,0.4,0.9,0.1,0.5,0.8,0.3,0.2,0.8,0.7,0.4]
+};
+var EMB_COLORS=["rgba(34,211,238,.85)","rgba(129,140,248,.85)","rgba(52,211,153,.85)","rgba(251,191,36,.85)"];
+var ATTN=[[0.9,0.1,0.1,0.1],[0.4,0.8,0.2,0.1],[0.2,0.5,0.9,0.3],[0.1,0.3,0.6,0.95]];
+var PROBS=[
+  {word:"the",prob:0.34,w:true},
+  {word:"a",prob:0.21},
+  {word:"my",prob:0.12},
+  {word:"her",prob:0.09},
+  {word:"your",prob:0.06},
+  {word:"that",prob:0.04}
+];
+var LAYERS=["Layer 1 · Syntax patterns","Layer 8 · Entity relationships","Layer 24 · Semantic reasoning","Layer 48 · Abstract concepts"];
+
+var current=0;
+var typeTimer=null;
+var layerRaf=null;
+
+// Build tabs
+var tabsEl=document.getElementById("tabs");
+STAGES.forEach(function(s,i){
+  var b=document.createElement("button");
+  b.className="tab"+(i===0?" active":"");
+  b.textContent=TAB_LABELS[i];
+  b.setAttribute("data-i",i);
+  b.onclick=function(){goTo(parseInt(this.getAttribute("data-i")));};
+  b.id="tab"+i;
+  tabsEl.appendChild(b);
+});
+
+// Build attention grid
+function buildAttnGrid(){
+  var grid=document.getElementById("attn-grid");
+  grid.innerHTML="";
+  var sp=document.createElement("div"); sp.style.height="26px"; grid.appendChild(sp);
+  TOKENS.forEach(function(t){
+    var d=document.createElement("div"); d.className="attn-hdr"; d.textContent=t; grid.appendChild(d);
+  });
+  TOKENS.forEach(function(rowTok,r){
+    var lbl=document.createElement("div"); lbl.className="attn-row-lbl"; lbl.textContent=rowTok; grid.appendChild(lbl);
+    ATTN[r].forEach(function(v,c){
+      var cell=document.createElement("div"); cell.className="attn-cell";
+      cell.style.background="rgba(34,211,238,0)";
+      cell.style.color="#22d3ee";
+      cell.setAttribute("data-v",v);
+      cell.setAttribute("data-delay",(r*4+c)*40);
+      grid.appendChild(cell);
+    });
+  });
+}
+
+// Build embeddings
+function buildEmbeddings(){
+  var cont=document.getElementById("emb-container"); cont.innerHTML="";
+  TOKENS.forEach(function(tok,i){
+    var row=document.createElement("div"); row.className="emb-row";
+    var lbl=document.createElement("div"); lbl.className="emb-label"; lbl.textContent=tok;
+    var bars=document.createElement("div"); bars.className="emb-bars";
+    EMBEDDINGS[tok].forEach(function(v,j){
+      var b=document.createElement("div"); b.className="emb-bar";
+      b.style.background=EMB_COLORS[i];
+      b.setAttribute("data-opacity",v);
+      b.setAttribute("data-delay",(i*12+j)*45);
+      bars.appendChild(b);
+    });
+    row.appendChild(lbl); row.appendChild(bars); cont.appendChild(row);
+  });
+}
+
+// Build layers
+function buildLayers(){
+  var cont=document.getElementById("layers-container"); cont.innerHTML="";
+  LAYERS.forEach(function(name,i){
+    var row=document.createElement("div"); row.className="layer-row";
+    var num=document.createElement("div"); num.className="layer-num"; num.textContent=i+1;
+    var track=document.createElement("div"); track.className="layer-track";
+    var fill=document.createElement("div"); fill.className="layer-fill"; fill.id="lf"+i;
+    var text=document.createElement("div"); text.className="layer-text"; text.id="lt"+i; text.textContent=name;
+    var dot=document.createElement("div"); dot.className="layer-dot"; dot.id="ld"+i;
+    track.appendChild(fill); track.appendChild(text);
+    row.appendChild(num); row.appendChild(track); row.appendChild(dot);
+    cont.appendChild(row);
+  });
+}
+
+// Build prob bars
+function buildProbs(){
+  var cont=document.getElementById("prob-bars"); cont.innerHTML="";
+  PROBS.forEach(function(p,i){
+    var row=document.createElement("div"); row.className="prob-row";
+    var word=document.createElement("div"); word.className="prob-word"+(p.w?" w":""); word.textContent=p.word;
+    var track=document.createElement("div"); track.className="prob-track";
+    var fill=document.createElement("div"); fill.className="prob-fill "+(p.w?"w":"o"); fill.id="pf"+i;
+    var pct=document.createElement("div"); pct.className="prob-pct"+(p.w?" w":""); pct.textContent=Math.round(p.prob*100)+"%";
+    track.appendChild(fill);
+    row.appendChild(word); row.appendChild(track); row.appendChild(pct);
+    cont.appendChild(row);
+  });
+}
+
+buildAttnGrid();
+buildEmbeddings();
+buildLayers();
+buildProbs();
+
+function updateHeader(){
+  var s=STAGES[current];
+  document.getElementById("head-icon").textContent=s.icon;
+  document.getElementById("head-label").textContent=s.label;
+  document.getElementById("head-name").textContent=s.name;
+  var dotsEl=document.getElementById("dots"); dotsEl.innerHTML="";
+  STAGES.forEach(function(_,i){
+    var d=document.createElement("div"); d.className="dot";
+    d.style.width=i===current?"18px":"6px";
+    d.style.background=i===current?"#22d3ee":i<current?"rgba(34,211,238,.4)":"rgba(255,255,255,.1)";
+    dotsEl.appendChild(d);
+  });
+}
+
+function updateTabs(){
+  STAGES.forEach(function(_,i){
+    document.getElementById("tab"+i).className="tab"+(i===current?" active":"");
+  });
+}
+
+function updateNav(){
+  document.getElementById("btn-prev").disabled=current===0;
+  document.getElementById("btn-next").disabled=current===STAGES.length-1;
+}
+
+function showStage(idx){
+  document.querySelectorAll(".stage").forEach(function(s){s.classList.remove("active");});
+  document.getElementById("s"+idx).classList.add("active");
+}
+
+function clearAnims(){
+  if(typeTimer){clearInterval(typeTimer);typeTimer=null;}
+  if(layerRaf){cancelAnimationFrame(layerRaf);layerRaf=null;}
+}
+
+function goTo(idx){
+  clearAnims();
+  current=idx;
+  updateHeader();
+  updateTabs();
+  updateNav();
+  showStage(idx);
+  if(idx===0) startTypewriter();
+  else if(idx===1) animateChips();
+  else if(idx===2) animateEmbeddings();
+  else if(idx===3) animateAttention();
+  else if(idx===4) animateLayers();
+  else if(idx===5) animateProbs();
+}
+
+function startTypewriter(){
+  var el=document.getElementById("typewriter");
+  var prompt="The cat sat on";
+  el.textContent="";
+  document.getElementById("char-count").textContent="0";
+  var i=0;
+  typeTimer=setInterval(function(){
+    if(i<prompt.length){el.textContent=prompt.slice(0,++i);document.getElementById("char-count").textContent=i;}
+    else{clearInterval(typeTimer);typeTimer=null;}
+  },80);
+}
+
+function animateChips(){
+  for(var i=0;i<4;i++){
+    (function(idx){
+      var chip=document.getElementById("chip"+idx);
+      chip.style.opacity="0"; chip.style.transform="translateY(12px)";
+      setTimeout(function(){chip.style.opacity="1";chip.style.transform="translateY(0)";},200+idx*100);
+    })(i);
+  }
+}
+
+function animateEmbeddings(){
+  document.querySelectorAll(".emb-bar").forEach(function(b){
+    b.style.opacity="0";
+    setTimeout(function(){b.style.opacity=b.getAttribute("data-opacity");},parseInt(b.getAttribute("data-delay")));
+  });
+}
+
+function animateAttention(){
+  document.querySelectorAll(".attn-cell").forEach(function(cell){
+    var v=parseFloat(cell.getAttribute("data-v"));
+    var delay=parseInt(cell.getAttribute("data-delay"));
+    cell.style.background="rgba(34,211,238,0)";
+    cell.textContent="";
+    setTimeout(function(){
+      cell.style.background="rgba(34,211,238,"+v+")";
+      cell.textContent=v.toFixed(1);
+      cell.style.color=v>0.5?"#071014":"#22d3ee";
+    },300+delay);
+  });
+}
+
+function animateLayers(){
+  var startTs=null;
+  function frame(ts){
+    if(!startTs) startTs=ts;
+    var progress=Math.min((ts-startTs)/1600,1);
+    LAYERS.forEach(function(_,i){
+      var lp=Math.max(0,Math.min(1,(progress-i*0.2)/0.28));
+      var fill=document.getElementById("lf"+i);
+      var text=document.getElementById("lt"+i);
+      var dot=document.getElementById("ld"+i);
+      if(fill) fill.style.width=(lp*100)+"%";
+      if(text) text.style.color=lp>0.25?"#e2e8f0":"#475569";
+      if(dot){dot.style.background=lp>=1?"#22d3ee":"rgba(255,255,255,.08)";dot.style.boxShadow=lp>=1?"0 0 8px #22d3ee":"none";}
+    });
+    if(progress<1) layerRaf=requestAnimationFrame(frame);
+    else layerRaf=null;
+  }
+  layerRaf=requestAnimationFrame(frame);
+}
+
+function animateProbs(){
+  PROBS.forEach(function(p,i){
+    var fill=document.getElementById("pf"+i);
+    if(fill){fill.style.width="0%";setTimeout(function(){fill.style.width=(p.prob*100)+"%";},100+i*110);}
+  });
+}
+
+document.getElementById("btn-prev").onclick=function(){if(current>0) goTo(current-1);};
+document.getElementById("btn-next").onclick=function(){if(current<STAGES.length-1) goTo(current+1);};
+
+goTo(0);
+</script>
+</body>
+</html>

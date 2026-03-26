@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FOCUS Prompt Lab | Electric AI Lab</title>
+  <link rel="stylesheet" href="electric-theme.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    .focus-builder { margin-top: 2rem; }
+    .drag-items, .drop-zone { margin: 1rem 0; }
+    .drop-zone { min-height: 200px; }
+  </style>
+<link rel="stylesheet" href="electric-theme.css">
+<script src="casey-widget.js" defer></script>
+</head>
+<body>
+  <nav class="navbar" style="display:flex; gap:1rem; justify-content:center; padding:1rem; background:#0B0F1A; border-bottom:1px solid #00E5FF;">
+    <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+    <a href="focus-prompt-lab.html" class="nav-link"><i class="fas fa-crosshairs"></i> FOCUS Lab</a>
+    <a href="ready-framework.html" class="nav-link"><i class="fas fa-check-double"></i> READY</a>
+    <a href="compare-ai-models.html" class="nav-link"><i class="fas fa-chart-line"></i> Compare AI</a>
+    <a href="steal-these-prompts.html" class="nav-link"><i class="fas fa-magic"></i> Steal Prompts</a>
+    <a href="glossary.html" class="nav-link"><i class="fas fa-book-open"></i> Glossary</a>
+    <a href="ai-literacy-starter-course.html" class="nav-link"><i class="fas fa-graduation-cap"></i> Free Course</a>
+    <a href="resources.html" class="nav-link"><i class="fas fa-database"></i> Resources</a>
+    <a href="interactive-lab.html" class="nav-link"><i class="fas fa-flask"></i> Interactive Lab</a>
+  </nav>
+
+  <div class="wrap" style="padding: 2rem 0;">
+    <div class="section-title"><i class="fas fa-crosshairs"></i> FOCUS Prompt Builder</div>
+    <p>Drag any framework element below, then fill in the details and click "Generate". Casey will also help you improve any prompt instantly via the floating widget.</p>
+
+    <!-- The builder container – Casey widget script will populate it -->
+    <div class="focus-builder"></div>
+
+    <hr style="margin: 2rem 0; border-color:#00E5FF33;">
+
+    <div class="section-title"><i class="fas fa-magic"></i> Try Casey's Auto‑Fix</div>
+    <p>Click the floating Casey mouse on any page → paste your prompt → get a READY+FOCUS improved version.</p>
+    <button id="quickFixBtn" class="btn" style="margin-top:1rem;"><i class="fas fa-mouse"></i> Open Casey Fixer</button>
+  </div>
+
+  <footer style="text-align:center; padding:2rem; border-top:1px solid #00E5FF; margin-top:2rem;">
+    <p>Electric AI Lab • Heather Schneiter • <a href="mailto:heatherailearninglab@gmail.com">heatherailearninglab@gmail.com</a></p>
+  </footer>
+
+  <script src="casey-widget.js"></script>
+  <script>
+    document.getElementById('quickFixBtn').addEventListener('click', () => {
+      const modal = document.getElementById('caseyModal');
+      if(modal) modal.style.display = 'flex';
+    });
+  </script>
+</body>
+</html>

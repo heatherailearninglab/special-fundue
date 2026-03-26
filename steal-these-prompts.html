@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Steal these prompts! • AI Learning Lab</title>
+<meta name="description" content="Ready-now prompts visitors can borrow and adapt, with examples of what they can create.">
+<style>
+  :root{
+    --bg:#0b1020;
+    --bg-2:#121933;
+    --ink:#eef4ff;
+    --muted:#bfd0ee;
+    --line:rgba(255,255,255,.14);
+    --card:rgba(255,255,255,.06);
+    --teal:#20c7c1;
+    --sky:#8fd3ff;
+    --peach:#ffd6a5;
+    --lav:#d8c0ff;
+    --mint:#bff7d4;
+    --yellow:#ffe58f;
+    --shadow:0 20px 50px rgba(0,0,0,.28);
+    --radius:24px;
+    --max:1180px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:Inter,Segoe UI,Arial,sans-serif;
+    color:var(--ink);
+    line-height:1.65;
+    background:
+      radial-gradient(circle at top left, rgba(255,214,165,.12), transparent 28%),
+      radial-gradient(circle at top right, rgba(216,192,255,.10), transparent 26%),
+      radial-gradient(circle at 20% 70%, rgba(191,247,212,.08), transparent 25%),
+      linear-gradient(180deg,#08111f 0%,#0d1630 45%,#131c38 100%);
+  }
+  a{color:var(--sky);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 22px}
+  .skip-link{
+    position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;
+  }
+  .skip-link:focus{
+    left:16px;top:16px;width:auto;height:auto;padding:12px 16px;border-radius:12px;
+    background:#fff;color:#000;z-index:9999;font-weight:700;
+  }
+  .nav{
+    position:sticky;top:0;z-index:20;
+    backdrop-filter:blur(10px);
+    background:rgba(8,13,28,.78);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 0}
+  .brand{font-weight:800;font-size:1.06rem;color:#fff}
+  .brand small{display:block;font-size:.8rem;font-weight:500;color:var(--muted)}
+  .nav-links{display:flex;flex-wrap:wrap;gap:14px;font-size:.96rem}
+  h1,h2,h3{line-height:1.15;margin:0 0 14px}
+  h1{font-size:clamp(2.4rem,5vw,4.3rem)}
+  h2{font-size:clamp(1.6rem,3vw,2.5rem)}
+  h3{font-size:1.15rem}
+  p,li{font-size:1.04rem}
+  .hero{padding:66px 0 36px}
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center}
+  .eyebrow{
+    display:inline-block;padding:8px 12px;border:1px solid var(--line);border-radius:999px;
+    color:var(--mint);background:rgba(255,255,255,.05);font-size:.86rem;font-weight:800;
+  }
+  .lead{font-size:1.12rem;color:var(--muted);max-width:760px}
+  .button-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;padding:13px 18px;border-radius:16px;
+    background:linear-gradient(135deg,var(--sky),#d8f0ff);color:#06111f;font-weight:800;border:0;box-shadow:var(--shadow)
+  }
+  .btn.secondary{
+    background:rgba(255,255,255,.04);color:var(--ink);border:1px solid var(--line);box-shadow:none
+  }
+  .section{padding:28px 0 48px}
+  .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+  .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+  .card{
+    background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03));
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:22px;
+    box-shadow:var(--shadow);
+  }
+  .feature{
+    position:relative;overflow:hidden;
+  }
+  .feature:before{
+    content:"";
+    position:absolute;inset:auto -30px -30px auto;width:130px;height:130px;border-radius:50%;
+    background:radial-gradient(circle, rgba(255,214,165,.22), transparent 68%);
+    pointer-events:none;
+  }
+  .tag{
+    display:inline-block;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.07);
+    border:1px solid var(--line);font-size:.84rem;color:var(--muted);margin:4px 6px 0 0
+  }
+  .small{font-size:.94rem;color:var(--muted)}
+  .footer{padding:30px 0 46px;color:var(--muted);font-size:.94rem;border-top:1px solid var(--line);margin-top:26px}
+  .cta{background:linear-gradient(135deg,rgba(143,211,255,.12),rgba(255,214,165,.08));border:1px solid rgba(143,211,255,.28)}
+  img.responsive{max-width:100%;height:auto;border-radius:20px;border:1px solid var(--line);display:block}
+  figure{margin:0}
+  figcaption{font-size:.94rem;color:var(--muted);margin-top:10px}
+  code, pre{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  pre{
+    white-space:pre-wrap;
+    background:#091120;border:1px solid var(--line);padding:18px;border-radius:18px;color:#f3f6ff;
+  }
+  :focus-visible{outline:3px solid var(--yellow);outline-offset:3px;border-radius:10px}
+  @media (max-width: 900px){
+    .hero-grid,.grid,.grid-2{grid-template-columns:1fr}
+    .nav-inner{align-items:flex-start;flex-direction:column}
+  }
+</style>
+<link rel="stylesheet" href="electric-theme.css">
+<script src="casey-widget.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<nav class="nav" aria-label="Primary">
+<div class="wrap nav-inner">
+  <div class="brand">AI Learning Lab<small>Practical AI literacy with a warmer, more playful feel</small></div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="start-here.html">Start Here</a>
+    <a href="shop.html">Shop</a>
+    <a href="workshops.html">Workshops</a>
+    <a href="resources.html">Resources</a>
+    <a href="ai-literacy-starter-course.html">Free Course</a>
+    <a href="interactive-lab.html">Interactive Lab</a>
+    <a href="glossary.html">Glossary</a>
+    <a href="steal-these-prompts.html">Steal these prompts!</a>
+    <a href="ready-framework.html">READY Framework</a>
+    <a href="faq.html">FAQ</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</div>
+</nav>
+<main id="main">
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Ready-now prompts • examples included • fun inspiration</span>
+      <h1>Steal these prompts!</h1>
+      <p class="lead">Use these prompts, remix them, and make them your own. This page is designed to feel practical and playful at the same time, with real examples visitors can study and adapt.</p>
+      <div class="button-row">
+        <a class="btn" href="#example">See the figurine example</a>
+        <a class="btn secondary" href="mini-prompt-lab.html">Try the Mini Prompt Lab</a>
+      </div>
+    </div>
+    <div class="card feature cta">
+      <h3>How to use this page</h3>
+      <p>Copy a prompt. Change the subject, audience, format, or tone. Then compare your result to the example and adjust. This helps visitors learn by doing, not just reading.</p>
+      <span class="tag">Copy-friendly</span><span class="tag">Classroom ready</span><span class="tag">Creative</span>
+    </div>
+  </div>
+</header>
+
+<section class="section" id="example">
+  <div class="wrap">
+    <div class="grid-2">
+      <div class="card feature">
+        <h2>Example prompt</h2>
+        <pre aria-label="Prompt text">create a 1/7 scale commercialized figurine of the characters in the picture, in a realistic style, in a real environment. The figurine is placed on a computer desk. The figurine has a round transparent acrylic base, with no text on the base. The content on the computer screen is a 3D modeling process of this figurine. Next to the computer screen is a toy packaging box, designed in a style reminiscent of high-quality collectible figures, printed with original artwork. The packaging features two-dimensional flat illustrations.</pre>
+        <p class="small">Tip: Visitors can swap in a different pet, person, character, or product idea. They can also change the scale, the environment, or the style.</p>
+      </div>
+      <div class="card feature">
+        <h2>What this prompt created</h2>
+        <figure>
+          <img class="responsive" src="lizzie-bee-figurine-example.png" alt="A collectible figurine concept on a desk featuring a dog named Lizzie Bee, with a toy-style package beside it and a computer screen showing the 3D modeling process." />
+          <figcaption>This example shows the result of the prompt above. The image includes a figurine on a clear acrylic base, packaging artwork, and a 3D design interface on the screen, which closely matches the prompt details.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <h2>More prompts visitors can steal</h2>
+    <div class="grid">
+      <div class="card feature">
+        <h3>Make a classroom visual</h3>
+        <p>Create a bright, kid-friendly poster that explains [topic] for [grade level] using simple language, strong contrast, and inclusive illustrations. Add a short title, three key facts, and one question at the bottom.</p>
+      </div>
+      <div class="card feature">
+        <h3>Turn notes into a handout</h3>
+        <p>Turn these notes into a one-page handout for [audience]. Use clear headings, bullet points, plain language, and a friendly tone. End with three takeaways and one reflection question.</p>
+      </div>
+      <div class="card feature">
+        <h3>Build a better prompt</h3>
+        <p>Improve this weak prompt so it gives clearer results. Add purpose, audience, tone, structure, and any missing details. Then explain what changed and why it should work better.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="card cta">
+      <h2>Why this page works</h2>
+      <p>It gives visitors something they can use immediately. It also makes the site feel more alive, more generous, and less formal. That helps the whole brand feel smart without feeling stiff.</p>
+      <div class="button-row">
+        <a class="btn" href="resources.html">Browse resources</a>
+        <a class="btn secondary" href="glossary.html">Open the glossary</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="footer"><div class="wrap">AI Learning Lab • Heather Schneiter • <a href="mailto:heatherailearninglab@gmail.com">heatherailearninglab@gmail.com</a></div></footer>
+</body>
+</html>

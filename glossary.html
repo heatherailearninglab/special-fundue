@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glossary • AI Learning Lab</title>
+<meta name="description" content="Key AI literacy terms in clear, beginner-friendly language.">
+<style>
+  :root{
+    --bg:#0b1020;
+    --bg-2:#121933;
+    --ink:#eef4ff;
+    --muted:#bfd0ee;
+    --line:rgba(255,255,255,.14);
+    --card:rgba(255,255,255,.06);
+    --teal:#20c7c1;
+    --sky:#8fd3ff;
+    --peach:#ffd6a5;
+    --lav:#d8c0ff;
+    --mint:#bff7d4;
+    --yellow:#ffe58f;
+    --shadow:0 20px 50px rgba(0,0,0,.28);
+    --radius:24px;
+    --max:1180px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:Inter,Segoe UI,Arial,sans-serif;
+    color:var(--ink);
+    line-height:1.65;
+    background:
+      radial-gradient(circle at top left, rgba(255,214,165,.12), transparent 28%),
+      radial-gradient(circle at top right, rgba(216,192,255,.10), transparent 26%),
+      radial-gradient(circle at 20% 70%, rgba(191,247,212,.08), transparent 25%),
+      linear-gradient(180deg,#08111f 0%,#0d1630 45%,#131c38 100%);
+  }
+  a{color:var(--sky);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 22px}
+  .skip-link{
+    position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;
+  }
+  .skip-link:focus{
+    left:16px;top:16px;width:auto;height:auto;padding:12px 16px;border-radius:12px;
+    background:#fff;color:#000;z-index:9999;font-weight:700;
+  }
+  .nav{
+    position:sticky;top:0;z-index:20;
+    backdrop-filter:blur(10px);
+    background:rgba(8,13,28,.78);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 0}
+  .brand{font-weight:800;font-size:1.06rem;color:#fff}
+  .brand small{display:block;font-size:.8rem;font-weight:500;color:var(--muted)}
+  .nav-links{display:flex;flex-wrap:wrap;gap:14px;font-size:.96rem}
+  h1,h2,h3{line-height:1.15;margin:0 0 14px}
+  h1{font-size:clamp(2.4rem,5vw,4.3rem)}
+  h2{font-size:clamp(1.6rem,3vw,2.5rem)}
+  h3{font-size:1.15rem}
+  p,li{font-size:1.04rem}
+  .hero{padding:66px 0 36px}
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center}
+  .eyebrow{
+    display:inline-block;padding:8px 12px;border:1px solid var(--line);border-radius:999px;
+    color:var(--mint);background:rgba(255,255,255,.05);font-size:.86rem;font-weight:800;
+  }
+  .lead{font-size:1.12rem;color:var(--muted);max-width:760px}
+  .button-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;padding:13px 18px;border-radius:16px;
+    background:linear-gradient(135deg,var(--sky),#d8f0ff);color:#06111f;font-weight:800;border:0;box-shadow:var(--shadow)
+  }
+  .btn.secondary{
+    background:rgba(255,255,255,.04);color:var(--ink);border:1px solid var(--line);box-shadow:none
+  }
+  .section{padding:28px 0 48px}
+  .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+  .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+  .card{
+    background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03));
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:22px;
+    box-shadow:var(--shadow);
+  }
+  .feature{
+    position:relative;overflow:hidden;
+  }
+  .feature:before{
+    content:"";
+    position:absolute;inset:auto -30px -30px auto;width:130px;height:130px;border-radius:50%;
+    background:radial-gradient(circle, rgba(255,214,165,.22), transparent 68%);
+    pointer-events:none;
+  }
+  .tag{
+    display:inline-block;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.07);
+    border:1px solid var(--line);font-size:.84rem;color:var(--muted);margin:4px 6px 0 0
+  }
+  .small{font-size:.94rem;color:var(--muted)}
+  .footer{padding:30px 0 46px;color:var(--muted);font-size:.94rem;border-top:1px solid var(--line);margin-top:26px}
+  .cta{background:linear-gradient(135deg,rgba(143,211,255,.12),rgba(255,214,165,.08));border:1px solid rgba(143,211,255,.28)}
+  img.responsive{max-width:100%;height:auto;border-radius:20px;border:1px solid var(--line);display:block}
+  figure{margin:0}
+  figcaption{font-size:.94rem;color:var(--muted);margin-top:10px}
+  code, pre{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  pre{
+    white-space:pre-wrap;
+    background:#091120;border:1px solid var(--line);padding:18px;border-radius:18px;color:#f3f6ff;
+  }
+  :focus-visible{outline:3px solid var(--yellow);outline-offset:3px;border-radius:10px}
+  @media (max-width: 900px){
+    .hero-grid,.grid,.grid-2{grid-template-columns:1fr}
+    .nav-inner{align-items:flex-start;flex-direction:column}
+  }
+</style>
+<link rel="stylesheet" href="electric-theme.css">
+<script src="casey-widget.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<nav class="nav" aria-label="Primary">
+<div class="wrap nav-inner">
+  <div class="brand">AI Learning Lab<small>Practical AI literacy with a warmer, more playful feel</small></div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="start-here.html">Start Here</a>
+    <a href="shop.html">Shop</a>
+    <a href="workshops.html">Workshops</a>
+    <a href="resources.html">Resources</a>
+    <a href="ai-literacy-starter-course.html">Free Course</a>
+    <a href="interactive-lab.html">Interactive Lab</a>
+    <a href="glossary.html">Glossary</a>
+    <a href="steal-these-prompts.html">Steal these prompts!</a>
+    <a href="ready-framework.html">READY Framework</a>
+    <a href="faq.html">FAQ</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</div>
+</nav>
+<main id="main">
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Key terminology • plain language • beginner friendly</span>
+      <h1>AI Glossary</h1>
+      <p class="lead">A simple glossary for visitors who want clear definitions without hype, jargon, or a wall of technical language.</p>
+      <div class="button-row">
+        <a class="btn" href="ai-literacy-starter-course.html">Start the free course</a>
+        <a class="btn secondary" href="ready-framework.html">See the READY Framework</a>
+      </div>
+    </div>
+    <div class="card feature cta">
+      <h3>Designed for accessibility</h3>
+      <p>This page uses larger text, strong contrast, semantic headings, keyboard-visible focus states, and plain-language definitions to support low-vision users and screen-reader users.</p>
+      <span class="tag">Low-vision friendly</span><span class="tag">Screen-reader ready</span><span class="tag">Plain language</span>
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="wrap">
+    <div class="grid-2">
+      <div class="card feature"><h3>AI literacy</h3><p>Understanding what AI is, where it appears, what it can and cannot do, and how to use it with good judgment.</p></div>
+      <div class="card feature"><h3>Generative AI</h3><p>AI systems that generate new content such as text, images, audio, code, or video based on patterns in training data.</p></div>
+      <div class="card feature"><h3>Prompt</h3><p>The instruction, question, or input you give an AI system to shape its output.</p></div>
+      <div class="card feature"><h3>Output</h3><p>The response the AI system gives back after processing your prompt.</p></div>
+      <div class="card feature"><h3>Large language model</h3><p>An AI model trained on large amounts of text so it can predict and generate language-like responses.</p></div>
+      <div class="card feature"><h3>Token</h3><p>A small chunk of text a language model reads and processes. A token might be a word, part of a word, or punctuation.</p></div>
+      <div class="card feature"><h3>Bias</h3><p>Patterns in outputs that may reflect unfair assumptions, stereotypes, gaps in data, or one-sided perspectives.</p></div>
+      <div class="card feature"><h3>Hallucination</h3><p>When AI produces information that sounds confident but is inaccurate, misleading, or entirely made up.</p></div>
+      <div class="card feature"><h3>Training data</h3><p>The content used to help build and tune an AI model.</p></div>
+      <div class="card feature"><h3>Context</h3><p>The background details that help an AI system understand what you want and respond more usefully.</p></div>
+      <div class="card feature"><h3>Accessibility</h3><p>Designing content so people with different abilities, devices, and support tools can use it successfully.</p></div>
+      <div class="card feature"><h3>Responsible AI use</h3><p>Using AI with care by checking accuracy, considering ethics, protecting privacy, and making thoughtful human decisions.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="card cta">
+      <h2>Where to go next</h2>
+      <p>Use this glossary alongside the free course, the READY Framework, and the Interactive Lab so visitors can learn terms in context, not in isolation.</p>
+      <div class="button-row">
+        <a class="btn" href="interactive-lab.html">Explore the Interactive Lab</a>
+        <a class="btn secondary" href="resources.html">Browse free resources</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="footer"><div class="wrap">AI Learning Lab • Heather Schneiter • <a href="mailto:heatherailearninglab@gmail.com">heatherailearninglab@gmail.com</a></div></footer>
+</body>
+</html>

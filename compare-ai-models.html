@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compare AI Models • AI Learning Lab</title>
+<meta name="description" content="Compare major generative AI models with live links and approved animal-poster artwork.">
+<style>
+  :root{
+    --bg:#eef0fb;
+    --ink:#20243b;
+    --muted:#5f6789;
+    --line:rgba(32,36,59,.14);
+    --card:#ffffff;
+    --navy:#50629b;
+    --pink:#d79ab6;
+    --mint:#a8dfd0;
+    --aqua:#89d6d0;
+    --lilac:#b9a6dd;
+    --slate:#6d779c;
+    --cream:#fbf8f2;
+    --shadow:0 14px 30px rgba(38,46,86,.08);
+    --radius:24px;
+    --max:1240px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:Inter,Segoe UI,Arial,sans-serif;
+    background:linear-gradient(180deg,#eff1fb 0%,#f8f4fb 48%,#f4fbf9 100%);
+    color:var(--ink);
+    line-height:1.65;
+  }
+  a{color:#314d9a;text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 22px}
+  .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+  .skip-link:focus{left:16px;top:16px;width:auto;height:auto;padding:12px 16px;border-radius:12px;background:#111;color:#fff;z-index:9999;font-weight:700}
+  .nav{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.84);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0}
+  .brand{font-weight:800;font-size:1.08rem;color:#243164}
+  .brand small{display:block;font-size:.82rem;font-weight:600;color:var(--muted)}
+  .nav-links{display:flex;flex-wrap:wrap;gap:14px;font-size:.96rem}
+  h1,h2,h3{line-height:1.1;margin:0 0 14px}
+  h1{font-size:clamp(2.5rem,5vw,4.2rem);letter-spacing:-.03em;color:#31457d}
+  h2{font-size:clamp(1.6rem,3vw,2.5rem);letter-spacing:-.02em}
+  h3{font-size:1.15rem}
+  p,li{font-size:1.04rem}
+  .hero{padding:68px 0 34px}
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center}
+  .eyebrow{display:inline-block;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:#fff;color:#47628e;font-size:.86rem;font-weight:800}
+  .lead{font-size:1.12rem;color:var(--muted);max-width:760px}
+  .button-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 18px;border-radius:16px;background:#4e629b;color:#fff;font-weight:800;border:0;box-shadow:var(--shadow)}
+  .btn.secondary{background:#fff;color:#364477;border:1px solid var(--line);box-shadow:none}
+  .section{padding:28px 0 48px}
+  .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+  .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+  .card{background:rgba(255,255,255,.86);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+  .feature{position:relative;overflow:hidden}
+  .feature:before{content:"";position:absolute;inset:auto -30px -30px auto;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle, rgba(215,154,182,.15), transparent 68%);pointer-events:none}
+  .tag{display:inline-block;padding:7px 10px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:.84rem;color:var(--muted);margin:4px 6px 0 0}
+  .small{font-size:.94rem;color:var(--muted)}
+  .footer{padding:30px 0 46px;color:var(--muted);font-size:.94rem;border-top:1px solid var(--line);margin-top:26px}
+  .cta{background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(248,241,252,.95));border:1px solid rgba(32,36,59,.10)}
+  img.responsive{max-width:100%;height:auto;border-radius:20px;border:1px solid var(--line);display:block;background:#fff}
+  figure{margin:0}
+  figcaption{font-size:.94rem;color:var(--muted);margin-top:10px}
+  .poster-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+  .poster-card{background:rgba(255,255,255,.88);border:1px solid var(--line);border-radius:24px;padding:14px;box-shadow:var(--shadow)}
+  .poster-card img{width:100%;height:auto;border-radius:18px;display:block}
+  .poster-meta{padding:14px 8px 6px}
+  .model-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+  .model-btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:14px;font-weight:800;border:1px solid var(--line);background:#fff;color:#30437d}
+  .callout{border-left:6px solid #93d7cc;padding-left:14px}
+  :focus-visible{outline:3px solid #27356b;outline-offset:3px;border-radius:10px}
+  @media (max-width: 980px){.hero-grid,.grid,.grid-2,.poster-grid{grid-template-columns:1fr}.nav-inner{align-items:flex-start;flex-direction:column}}
+</style>
+<link rel="stylesheet" href="electric-theme.css">
+<script src="casey-widget.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<nav class="nav" aria-label="Primary">
+  <div class="wrap nav-inner">
+    <div class="brand">AI Learning Lab<small>Practical AI literacy with a warmer, friendlier visual style</small></div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="start-here.html">Start Here</a>
+      <a href="shop.html">Shop</a>
+      <a href="workshops.html">Workshops</a>
+      <a href="resources.html">Resources</a>
+      <a href="ai-literacy-starter-course.html">Free Course</a>
+      <a href="interactive-lab.html">Interactive Lab</a>
+      <a href="compare-ai-models.html">Compare AI Models</a>
+      <a href="glossary.html">Glossary</a>
+      <a href="steal-these-prompts.html">Steal these prompts!</a>
+      <a href="ready-framework.html">READY Framework</a>
+      <a href="faq.html">FAQ</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</nav>
+<main id="main">
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Friendly animal guide • live tool links • choose the right model</span>
+      <h1>Compare Generative AI Models</h1>
+      <p class="lead">This page uses your approved art style and color direction. Each model has its own poster-style card, a plain-language summary, and a live button so visitors can try the tool directly.</p>
+      <div class="button-row">
+        <a class="btn" href="#models">Jump to the models</a>
+        <a class="btn secondary" href="glossary.html">Open the glossary</a>
+      </div>
+    </div>
+    <div class="card cta feature">
+      <h3>How to use this page</h3>
+      <p class="callout">Use this as a quick starting guide, not a final ranking. Different tools shine in different situations. The best choice depends on whether you want creativity, document analysis, productivity help, live information, or coding support.</p>
+      <span class="tag">ChatGPT</span><span class="tag">Copilot</span><span class="tag">Claude</span><span class="tag">Grok</span><span class="tag">Gemini</span><span class="tag">DeepSeek</span>
+    </div>
+  </div>
+</header>
+
+<section class="section" id="models">
+  <div class="wrap">
+    <div class="poster-grid">
+      <article class="poster-card">
+        <figure>
+          <img src="model-chatgpt.png" alt="ChatGPT model poster in a pastel editorial style with a raccoon mascot working at a laptop." class="responsive">
+          <figcaption>ChatGPT as the creative generalist.</figcaption>
+        </figure>
+        <div class="poster-meta">
+          <h3>ChatGPT</h3>
+          <p class="small">Strong for brainstorming, writing support, teaching content, and versatile everyday use.</p>
+          <div class="model-links"><a class="model-btn" href="https://chatgpt.com/" target="_blank" rel="noopener">Try ChatGPT</a></div>
+        </div>
+      </article>
+
+      <article class="poster-card">
+        <figure>
+          <img src="model-copilot.png" alt="Copilot model poster in a pastel editorial style with a helpful robot animal mascot using a laptop." class="responsive">
+          <figcaption>Copilot as the productivity partner.</figcaption>
+        </figure>
+        <div class="poster-meta">
+          <h3>Copilot</h3>
+          <p class="small">Useful for work tasks inside Microsoft tools like Word, Excel, Outlook, and PowerPoint.</p>
+          <div class="model-links"><a class="model-btn" href="https://copilot.microsoft.com/" target="_blank" rel="noopener">Try Copilot</a></div>
+        </div>
+      </article>
+
+      <article class="poster-card">
+        <figure>
+          <img src="model-claude.png" alt="Claude model poster in a pastel editorial style with a refined poodle mascot writing in a notebook." class="responsive">
+          <figcaption>Claude as the thoughtful analyst.</figcaption>
+        </figure>
+        <div class="poster-meta">
+          <h3>Claude</h3>
+          <p class="small">Helpful for structured reasoning, long documents, careful writing, and nuanced analysis.</p>
+          <div class="model-links"><a class="model-btn" href="https://claude.ai/" target="_blank" rel="noopener">Try Claude</a></div>
+        </div>
+      </article>
+
+      <article class="poster-card">
+        <figure>
+          <img src="model-grok.png" alt="Grok model poster in a pastel editorial style with a cool cat mascot wearing sunglasses and holding a phone." class="responsive">
+          <figcaption>Grok as the fast, real-time option.</figcaption>
+        </figure>
+        <div class="poster-meta">
+          <h3>Grok</h3>
+          <p class="small">Best when visitors want a more casual tone and quick access to live, fast-moving information.</p>
+          <div class="model-links"><a class="model-btn" href="https://grok.com/" target="_blank" rel="noopener">Try Grok</a></div>
+        </div>
+      </article>
+
+      <article class="poster-card">
+        <figure>
+          <img src="model-gemini.png" alt="Gemini model poster in a pastel editorial style with a hummingbird mascot and Google ecosystem visuals." class="responsive">
+          <figcaption>Gemini as the multimodal integrator.</figcaption>
+        </figure>
+        <div class="poster-meta">
+          <h3>Gemini</h3>
+          <p class="small">A strong fit for Google-based workflows, multimodal tasks, and larger-context analysis.</p>
+          <div class="model-links"><a class="model-btn" href="https://gemini.google.com/" target="_blank" rel="noopener">Try Gemini</a></div>
+        </div>
+      </article>
+
+      <article class="poster-card">
+        <figure>
+          <img src="model-deepseek.png" alt="DeepSeek model poster in a pastel editorial style with a hooded animal mascot in a futuristic coding room." class="responsive">
+          <figcaption>DeepSeek as the cost-efficient code optimizer.</figcaption>
+        </figure>
+        <div class="poster-meta">
+          <h3>DeepSeek</h3>
+          <p class="small">Popular for coding, logic-heavy tasks, and cost-conscious experimentation.</p>
+          <div class="model-links"><a class="model-btn" href="https://www.deepseek.com/" target="_blank" rel="noopener">Try DeepSeek</a></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="grid-2">
+      <div class="card feature">
+        <h2>Quick guide</h2>
+        <ul>
+          <li>Choose ChatGPT for general versatility and creative work.</li>
+          <li>Choose Copilot for Microsoft-centered productivity.</li>
+          <li>Choose Claude for long reading, careful reasoning, and structured writing.</li>
+          <li>Choose Grok for fast, live information and a more casual tone.</li>
+          <li>Choose Gemini for Google workflows and multimodal tasks.</li>
+          <li>Choose DeepSeek for coding, logic, and budget-aware experimentation.</li>
+        </ul>
+      </div>
+      <div class="card feature cta">
+        <h2>Accessibility note</h2>
+        <p>All posters include alt text, all live buttons are keyboard reachable, and the page keeps larger text, high contrast, and clear headings for easier reading.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer class="footer"><div class="wrap">AI Learning Lab • Heather Schneiter • <a href="mailto:heatherailearninglab@gmail.com">heatherailearninglab@gmail.com</a></div></footer>
+</body>
+</html>
