@@ -6,16 +6,9 @@
   <title>Electric AI Lab | Casey AI Mouse</title>
   <link rel="stylesheet" href="electric-theme.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    /* Additional homepage-specific adjustments */
-    .hero { position: relative; padding: 4rem 0; overflow: hidden; }
-    .hero-content { position: relative; z-index: 2; }
-  </style>
-<link rel="stylesheet" href="electric-theme.css">
-<script src="casey-widget.js" defer></script>
 </head>
 <body>
-  <nav class="navbar" style="display:flex; gap:1rem; justify-content:center; padding:1rem; background:#0B0F1A; border-bottom:1px solid #00E5FF;">
+  <nav class="navbar">
     <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
     <a href="focus-prompt-lab.html" class="nav-link"><i class="fas fa-crosshairs"></i> FOCUS Lab</a>
     <a href="ready-framework.html" class="nav-link"><i class="fas fa-check-double"></i> READY</a>
@@ -28,14 +21,13 @@
   </nav>
 
   <main>
-    <!-- Hero Section (with animation) -->
-    <div class="hero wrap">
+    <div class="hero">
       <div class="hero-graphic"></div>
-      <div class="hero-content">
-        <div class="eyebrow" style="color:var(--primary);">Prompt better • Learn faster • Use AI with care</div>
-        <h1 style="font-size:3.5rem;">AI Learning Lab helps you turn curiosity into confident action.</h1>
+      <div class="hero-content wrap">
+        <div class="eyebrow">Prompt better • Learn faster • Use AI with care</div>
+        <h1>AI Learning Lab helps you turn curiosity into confident action.</h1>
         <p class="lead">Learn how to use AI effectively, ethically, and confidently with Casey, your supportive guide. Start with the FOCUS Prompt Lab, take the free course, compare models, and explore examples you can actually use.</p>
-        <div class="button-row" style="display:flex; gap:1rem; margin-top:1.5rem;">
+        <div class="button-row">
           <a href="focus-prompt-lab.html" class="btn"><i class="fas fa-bolt"></i> Try the FOCUS Prompt Lab</a>
           <a href="ai-literacy-starter-course.html" class="btn btn-secondary"><i class="fas fa-chalkboard-user"></i> Start the free course</a>
           <a href="compare-ai-models.html" class="btn btn-secondary"><i class="fas fa-chart-simple"></i> Compare AI models</a>
@@ -47,22 +39,22 @@
     <div class="section wrap">
       <div class="grid-3">
         <div class="card">
-          <i class="fas fa-crosshairs" style="font-size:2rem; color:var(--primary);"></i>
-          <div class="kicker" style="color:var(--primary); margin-top:0.5rem;">Start here</div>
+          <i class="fas fa-crosshairs"></i>
+          <div class="kicker">Start here</div>
           <h3>FOCUS Prompt Lab</h3>
           <p>Paste any prompt. Casey improves it using Function, Objective, Context, User, and Specifics.</p>
           <a href="focus-prompt-lab.html" class="btn btn-secondary">Open the lab</a>
         </div>
         <div class="card">
-          <i class="fas fa-graduation-cap" style="font-size:2rem; color:var(--primary);"></i>
-          <div class="kicker" style="color:var(--primary);">Learn the basics</div>
+          <i class="fas fa-graduation-cap"></i>
+          <div class="kicker">Learn the basics</div>
           <h3>Free AI Literacy Starter Course</h3>
           <p>Get a short, guided introduction to prompting, evaluation, and responsible AI use.</p>
           <a href="ai-literacy-starter-course.html" class="btn btn-secondary">Take the course</a>
         </div>
         <div class="card">
-          <i class="fas fa-chart-line" style="font-size:2rem; color:var(--primary);"></i>
-          <div class="kicker" style="color:var(--primary);">Pick the right tool</div>
+          <i class="fas fa-chart-line"></i>
+          <div class="kicker">Pick the right tool</div>
           <h3>Compare AI Models</h3>
           <p>Use the animal‑poster guide to see what ChatGPT, Copilot, Claude, Grok, Gemini, and DeepSeek do best.</p>
           <a href="compare-ai-models.html" class="btn btn-secondary">See the guide</a>
@@ -74,7 +66,7 @@
     <div class="section wrap">
       <div class="grid-2">
         <div class="card">
-          <i class="fas fa-lightbulb" style="font-size:1.8rem; color:var(--primary);"></i>
+          <i class="fas fa-lightbulb"></i>
           <div class="kicker">Why this site matters</div>
           <h2>AI literacy should feel empowering, not intimidating.</h2>
           <p>This site helps people ask better questions, evaluate outputs more carefully, and use AI in ways that feel practical, responsible, and human‑centered.</p>
@@ -84,13 +76,13 @@
           </div>
         </div>
         <div class="card">
-          <i class="fas fa-tasks" style="font-size:1.8rem; color:var(--primary);"></i>
+          <i class="fas fa-tasks"></i>
           <div class="kicker">What you can do here</div>
-          <ul style="list-style:none; padding-left:0;">
-            <li><i class="fas fa-check-circle" style="color:var(--highlight);"></i> Improve prompts</li>
-            <li><i class="fas fa-check-circle" style="color:var(--highlight);"></i> Learn frameworks</li>
-            <li><i class="fas fa-check-circle" style="color:var(--highlight);"></i> Borrow examples</li>
-            <li><i class="fas fa-check-circle" style="color:var(--highlight);"></i> Explore interactively</li>
+          <ul>
+            <li><i class="fas fa-check-circle"></i> Improve prompts</li>
+            <li><i class="fas fa-check-circle"></i> Learn frameworks</li>
+            <li><i class="fas fa-check-circle"></i> Borrow examples</li>
+            <li><i class="fas fa-check-circle"></i> Explore interactively</li>
           </ul>
         </div>
       </div>
@@ -100,19 +92,19 @@
     <div class="section wrap">
       <div class="grid-3">
         <div class="card">
-          <i class="fas fa-chalkboard-user" style="font-size:2rem; color:var(--primary);"></i>
+          <i class="fas fa-chalkboard-user"></i>
           <div class="kicker">For teachers</div>
           <h3>Use AI to plan, scaffold, and reflect</h3>
           <p>Get starter prompts, classroom‑safe examples, and practical resources for teaching and learning.</p>
         </div>
         <div class="card">
-          <i class="fas fa-user-graduate" style="font-size:2rem; color:var(--primary);"></i>
+          <i class="fas fa-user-graduate"></i>
           <div class="kicker">For students</div>
           <h3>Learn how to question AI, not just use it</h3>
           <p>Build strong habits around accuracy, bias, context, and human judgment.</p>
         </div>
         <div class="card">
-          <i class="fas fa-users" style="font-size:2rem; color:var(--primary);"></i>
+          <i class="fas fa-users"></i>
           <div class="kicker">For teams</div>
           <h3>Bring AI literacy into real work</h3>
           <p>Use workshops, resources, and Casey’s guidance to build confidence and consistency.</p>
@@ -123,7 +115,7 @@
     <!-- Final CTA -->
     <div class="section wrap text-center">
       <div class="card" style="max-width:800px; margin:0 auto;">
-        <div class="kicker" style="color:var(--primary);">Next click</div>
+        <div class="kicker">Next click</div>
         <h2>Start with one simple step.</h2>
         <p>Open the FOCUS Prompt Lab and let Casey help you improve your first prompt.</p>
         <div class="button-row" style="justify-content:center;">
@@ -134,11 +126,10 @@
     </div>
   </main>
 
-  <footer style="text-align:center; padding:2rem; border-top:1px solid #00E5FF; margin-top:2rem;">
+  <footer>
     <p>Electric AI Lab • Heather Schneiter • <a href="mailto:heatherailearninglab@gmail.com">heatherailearninglab@gmail.com</a></p>
   </footer>
 
-  <!-- Include Casey widget and theme -->
   <script src="casey-widget.js"></script>
 </body>
 </html>
